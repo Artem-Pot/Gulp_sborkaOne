@@ -16,12 +16,22 @@ const gulppug = require('gulp-pug'); // препроцессор pug
 
 // функция работы с pug
 function pug() {
-    return src('app/*.pug')
+    return src('app/pug/*.pug')
         .pipe(gulppug({    //функция преобразования
             verbose: true // опция - показывает какой файл преобразует
         }))
-        .pipe(dest('dist/')) //кидает в папку с конечным файлом
+        .pipe(dest('app/')) //кидает в папку с конечным файлом
         .pipe(browserSync.stream()) // отслеживание изменений
+}
+
+//работа с файлами scss и его конвертация
+function styles() {
+    return src('app/scss/*.scss') //поиск файла стиля scss в сборке
+    .pipe(autoprefixer({ overrideBrowserslist : ['last 10 version']})) // подключение автопрефикса, после 10 версий браузеров
+    .pipe(concat('style.min.css')) // добавит в названии файла стиля - .min
+    .pipe(scss()) //подключение к модулю scss + если нужно сжать файл .pipe(scss({ outputStyle: 'compressed'}))
+    .pipe(dest('app/css')) //показать путь куда преобразовать готовый файл css
+    .pipe(browserSync.stream()) // обновляет страницу после каждого изменения -  Лайв сервер
 }
 
 //функция конвертации из любого формата шрифта в woff и woff2
@@ -32,32 +42,22 @@ function fonts() {
         }))
         .pipe(src('app/fonts/*.ttf')) // берет файлы которые сконвертировались выше и берет только форматы ttf
         .pipe(ttf2woff2())
-        .pipe(dest('app/fonts'))
+        .pipe(dest('dist/fonts'))
 }
-
-//работа с файлами scss и его конвертация
-function styles() {
-    return src('app/scss/style.scss') //поиск файла стиля scss в сборке
-    .pipe(autoprefixer({ overrideBrowserslist : ['last 10 version']})) // подключение автопрефикса, после 10 версий браузеров
-    .pipe(concat('style.min.css')) // добавит в названии файла стиля - .min
-    .pipe(scss({ outputStyle: 'compressed'})) //подключение к модулю scss + если нужно сжать файл
-    .pipe(dest('app/css')) //показать путь куда преобразовать готовый файл css
-    .pipe(browserSync.stream()) // обновляет страницу после каждого изменения -  Лайв сервер
-}
-
 //функция работы с изображениями ,сжатие
 function images() { 
     return src('app/images/src/*.*') //взять исходные файлы из папки и сжать их
         .pipe(newer('app/images')) //если видит что там уже есть изображения, не будет создавать другие
         .pipe(imagemin())
-        .pipe(dest('app/images')); // перенос изображений в папку
+        .pipe(dest('dist/images')); // перенос изображений в папку
 }
 
 // функция сборки всех скомпилированных файлов в нужную папку с готовым проектом
 function building() { 
     return src(['app/fonts/*.*', // работа со шрифтами
     'app/images/*.*', // работа с изображениями
-    'app/pug*.pug' // работа с pug
+    'app/*.html', // работа с pug/html
+    'app/css/*.*' // работа с css
     ], {base : 'app'}) // создает туже самую структура папок как в app
         .pipe(dest('dist')); // выгрузка в папку с готовым проектом /dist
 }
@@ -72,13 +72,13 @@ function cleanDist() {
 function watching() {
     browserSync.init({ // функция запуска лайв сервера
         server: {
-            baseDir: "app" // папка отслеживания
+            baseDir: "app/" // папка отслеживания
         }
     });
     watch(['app/fonts/src'], fonts)// если происходит изменение в папке fonts то запустит функцию конвертации 
-    watch(['app/scss/style.scss'], styles) // если происходит изменение в файле style.scss то запускается функция (styles), для работы со стилями
-    watch(['app/images/src'], images); // если происходит изменение в папке, то запускает таск для изображений
-    watch(['app/*.pug'], pug);
+    watch(['app/scss/*.scss'], styles) // если происходит изменение в файле style.scss то запускается функция (styles), для работы со стилями
+    watch(['app/images/*.*'], images); // если происходит изменение в папке, то запускает таск для изображений
+    watch(['app/pug/*.pug'], pug);
 }
 
 // вызов функций по отдельности или в составе сборки
