@@ -5,6 +5,25 @@ const ttf2woff2 = require('gulp-ttf2woff2'); // из ttf в woff формат ш
 const clean = require('gulp-clean'); //удалит все файлы из папки dist перед компиляцией
 const browserSync = require('browser-sync').create(); // лайв сервер
 
+const scss = require('gulp-sass')(require('sass')); // конвертация с препроцессора scss
+const concat = require('gulp-concat'); // собирает из нескольких файлов один + переименовывать(например .min добавлять в конец файла)
+const autoprefixer = require('gulp-autoprefixer'); // автопрефиксер
+
+const imagemin = require('gulp-imagemin'); // сжимает изображения PNG, JPEG, GIF и SVG
+const newer = require('gulp-newer'); // работа с кэшем
+
+const gulppug = require('gulp-pug'); // препроцессор pug
+
+// функция работы с pug
+function pug() {
+    return src('app/*.pug')
+        .pipe(gulppug({    //функция преобразования
+            verbose: true // опция - показывает какой файл преобразует
+        }))
+        .pipe(dest('dist/')) //кидает в папку с конечным файлом
+        .pipe(browserSync.stream()) // отслеживание изменений
+}
+
 //функция конвертации из любого формата шрифта в woff и woff2
 function fonts() {
     return src('app/fonts/src/*.*')
@@ -14,17 +33,37 @@ function fonts() {
         .pipe(src('app/fonts/*.ttf')) // берет файлы которые сконвертировались выше и берет только форматы ttf
         .pipe(ttf2woff2())
         .pipe(dest('app/fonts'))
-        .pipe(browserSync.stream());
 }
 
-//функция сборки всех скомпилированных файлов в нужную папку с готовым проектом
+//работа с файлами scss и его конвертация
+function styles() {
+    return src('app/scss/style.scss') //поиск файла стиля scss в сборке
+    .pipe(autoprefixer({ overrideBrowserslist : ['last 10 version']})) // подключение автопрефикса, после 10 версий браузеров
+    .pipe(concat('style.min.css')) // добавит в названии файла стиля - .min
+    .pipe(scss({ outputStyle: 'compressed'})) //подключение к модулю scss + если нужно сжать файл
+    .pipe(dest('app/css')) //показать путь куда преобразовать готовый файл css
+    .pipe(browserSync.stream()) // обновляет страницу после каждого изменения -  Лайв сервер
+}
+
+//функция работы с изображениями ,сжатие
+function images() { 
+    return src('app/images/src/*.*') //взять исходные файлы из папки и сжать их
+        .pipe(newer('app/images')) //если видит что там уже есть изображения, не будет создавать другие
+        .pipe(imagemin())
+        .pipe(dest('app/images')); // перенос изображений в папку
+}
+
+// функция сборки всех скомпилированных файлов в нужную папку с готовым проектом
 function building() { 
-    return src(['app/fonts/*.*',
+    return src(['app/fonts/*.*', // работа со шрифтами
+    'app/images/*.*', // работа с изображениями
+    'app/pug*.pug' // работа с pug
     ], {base : 'app'}) // создает туже самую структура папок как в app
         .pipe(dest('dist')); // выгрузка в папку с готовым проектом /dist
 }
 
-function cleanDist() { // функция удаления папки dist перед сборкой
+// функция удаления папки dist перед сборкой
+function cleanDist() { 
     return src('dist')
     .pipe(clean())
 }
@@ -36,16 +75,21 @@ function watching() {
             baseDir: "app" // папка отслеживания
         }
     });
-    watch(['app/fonts/src'], fonts);// если происходит изменение в папке fonts то запустит функцию конвертации 
+    watch(['app/fonts/src'], fonts)// если происходит изменение в папке fonts то запустит функцию конвертации 
+    watch(['app/scss/style.scss'], styles) // если происходит изменение в файле style.scss то запускается функция (styles), для работы со стилями
+    watch(['app/images/src'], images); // если происходит изменение в папке, то запускает таск для изображений
+    watch(['app/*.pug'], pug);
 }
 
+// вызов функций по отдельности или в составе сборки
 exports.fonts = fonts; //функция преобразования шрифтов
 exports.cleanDist = cleanDist; //функция удаления файлов и папок в dist
 exports.building = building; //функция  переноса файлов в конечную папку
 exports.watching = watching; // экспорт функции отслеживания изменения файлов
+exports.styles = styles; // экспорт функции работы с scss для дальнейшей работы с ней
+exports.images = images; // работа с изображениями
+exports.pug = pug; // работа с pug
 
-//------выполняет функции описанные выше, последовательно (series) или параллельно (parallel)(-------------
-
-//последовательная работа сборщика
-exports.building = series(cleanDist, building); //сначала преобразует файлы шрифтов, далее очистит папку с проектом и после перенесёт всё файлы в конечную папку
-exports.default = parallel(watching, fonts, building);
+// ------выполняет функции после старта сборки описанные выше, последовательно (series) или параллельно (parallel)(-------------
+exports.building = series(cleanDist, building); //последовательная работа сначала преобразует файлы шрифтов, далее очистит папку с проектом и после перенесёт всё файлы в конечную папку
+exports.default = parallel(styles, images, pug, watching, fonts, building); // параллельная работа (отслеживание, изменение шрифтов, перенесение файлов )
