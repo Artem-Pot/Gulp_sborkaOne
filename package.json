@@ -9,6 +9,7 @@
   "license": "ISC",
   "devDependencies": {
     "browser-sync": "^2.29.3",
+    "del": "^7.1.0",
     "gulp": "^4.0.2",
     "gulp-autoprefixer": "^8.0.0",
     "gulp-clean": "^0.4.0",
@@ -22,7 +23,6 @@
     "gulp-ttf2woff2": "^4.0.1",
     "sass": "^1.66.1"
   },
-
   "browserslist": [
     "last 5 versions"
   ]

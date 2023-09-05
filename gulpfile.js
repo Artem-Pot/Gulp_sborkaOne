@@ -14,11 +14,16 @@ const newer = require('gulp-newer'); // работа с кэшем
 const gulppug = require('gulp-pug'); // препроцессор pug
 
 const plumber = require('gulp-plumber'); //поиск ошибок
-const notify = require("gulp-notify"); // вывод ошибок в виде уведомления 
+const notify = require('gulp-notify'); // вывод ошибок в виде уведомления 
+
 
 // функция работы с pug
 function pug() {
-    return src('app/pug/index.pug')
+    return src('app/pug/index.pug' , {sourcemaps: true}) // sourcemaps: true - покажет ошибку в каком конкретно файле произошла ошибка
+        .pipe(plumber(notify.onError({ //работа с поиском и выводом ошибок в сообщении
+            title: "pug", 
+            message: "Error: <%= error.message %>"
+        }))) 
         .pipe(gulppug({    //функция преобразования
             verbose: true // опция - показывает какой файл преобразует
         }))
@@ -33,15 +38,13 @@ function styles() {
         title: "SCSS", 
         message: "Error: <%= error.message %>"
     }))) 
-    .pipe(autoprefixer({
-        
-    }))
+    // .pipe(autoprefixer({    //не работает
+    // }))
     .pipe(autoprefixer({overrideBrowserslist : ['last 10 version']}))
     .pipe(scss()) //подключение к модулю scss + если нужно сжать файл .pipe(scss({ outputStyle: 'compressed'}))
     .pipe(dest('app/css')) //показать путь куда преобразовать готовый файл css
     .pipe(browserSync.stream()) // обновляет страницу после каждого изменения -  Лайв сервер
 }
-
 //функция конвертации из любого формата шрифта в woff и woff2
 function fonts() {
     return src('app/fonts/src/*.*')
@@ -54,10 +57,14 @@ function fonts() {
 }
 //функция работы с изображениями, сжатие
 function images() { 
-    return src('app/img/src/**/*.*') //взять исходные файлы из папки и сжать их
+    return src('app/img/src/**/*.{jpg,jpeg,png,svg,gif,ico,webp,bmp}', {sourcemaps: true}) //взять исходные файлы олько файлы с изображениями из папки и сжать их + если нужно сжать файл .pipe(scss({ outputStyle: 'compressed'}))
+        .pipe(plumber(notify.onError({ //работа с поиском и выводом ошибок в сообщении
+            title: "Images", 
+            message: "Error: <%= error.message %>"
+        }))) 
         .pipe(newer('app/img')) //если видит что там уже есть изображения, не будет создавать другие
-        .pipe(imagemin())
-        .pipe(dest('app/img')); // перенос изображений в папку
+        .pipe(imagemin()) //сжимает файлы
+        .pipe(dest('app/img/')); // перенос изображений в папку с жатыми файлами
 }
 
 // функция сборки всех скомпилированных файлов в нужную папку с готовым проектом
@@ -104,10 +111,12 @@ exports.building = series(cleanDist, building); //последовательна
 exports.default = parallel(styles, images, pug, watching, fonts, building); // параллельная работа (отслеживание, изменение шрифтов, перенесение файлов )
 
 
-
+//не очищает папку dist перед сборкой
 //придумать как сделать чтобы сборку можно было делать если больше одной страницы
-//добавить работу с js
+//добавить работу с js сборка
 //не работает автопрефиксер
-//подключить модуль, при удалении файла - удаляет из сборки
+//подключить модуль, при удалении файла - удаляет из сборки (del)
 //модуль gulp-sourcemaps - чтобы видеть какие недочеты в dev tols с указанием на стили в формате scss а не css.
 //index.html сжимает, нужно отменить в настройках
+//сделать для изображений и шрифтов отдельную папку для конвертированных файлов ,чтобы не лежали вместе иначе путаница куда положить исходники
+//установить валидатор html https://github.com/center-key/w3c-html-validator
