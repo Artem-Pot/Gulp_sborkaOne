@@ -1,0 +1,303 @@
+.carousel {
+    padding-bottom: 30px;
+}
+
+.carousel__container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+    @media (min-width: 415px){
+        gap: 65px; 
+    }
+    @media (min-width: 480px){
+        gap: 60px; 
+    }
+    @media (min-width: 768px){
+        gap: 120px; 
+    }
+    @media (min-width: 1000px){
+        gap: 140px;
+    }
+    @media (min-width: 1960px){
+        gap: 200px;
+    }
+}
+// Карусель - слайдер
+.carousel__items {
+    position: relative;
+    width: 100%;
+    height: 277px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.carousel__item {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    padding: 20px 20px 30px;
+    border-radius: 20px;
+    border: 5px solid #4C75A3;
+    background: #FFF;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: calc(100% - 40px);
+    overflow: hidden;
+    transition: all 300ms ease-in-out;
+    z-index: -1;
+    opacity: 0;
+    @media (min-width: 415px){
+        flex-direction: row;
+        align-items: flex-start;
+        gap: 15px;
+        height: auto;
+        max-height: 160px;
+    }
+    @media (min-width: 480px){
+        gap: 20px;
+        max-height: 207px;
+    }
+    @media (min-width: 768px){
+        width: calc(100% - 150px);
+        gap: 25px;
+        max-height: 272px;
+        height: 100%;
+        flex-direction: row;
+    }
+    @media (min-width: 1000px){
+        width: 617px;
+        height: 272px;
+        gap: 40px;
+    }
+    @media (min-width: 1920px){
+        transform: translate(-70%, -50%);
+    }
+}
+
+.carousel__active {
+    opacity: 1;
+    z-index: 99;
+}
+
+.carousel__prev {
+    @media (min-width: 1000px){
+        z-index: 2;
+        opacity: 1;
+        transform: translate(-160%, -50%);
+    }
+    @media (min-width: 1920px){
+        transform: translate(-180%, -50%);
+    }
+}
+
+.carousel__next {
+    @media (min-width: 1000px){
+        z-index: 2;
+        opacity: 1;
+        transform: translate(60%, -50%);
+    }
+    @media (min-width: 1920px){
+        transform: translate(40%, -50%);
+    }
+}
+
+.carousel__text-box {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    gap: 5px;
+    position: relative;
+    padding-left: 50px;
+    width: 100%;
+    height: auto;
+    @media (min-width: 415px){
+        padding-left: 0px;
+        padding-top: 42px;
+        min-width: 115px; 
+    }
+    @media (min-width: 480px){
+        min-width: 125px; 
+    }
+    @media (min-width: 768px){
+        min-width: 180px; 
+        padding-top: 69px;
+        min-width: 180px;
+        padding-left: 0;
+        padding-top: 70px;
+    }
+    &::before {
+        content: "";
+        position: absolute;
+        background-size: 30px 30px;
+        background-repeat: no-repeat;
+        width: 30px;
+        height: 30px;
+        left: 0;
+        @media (min-width: 415px){
+            background-size: 24px 24px;
+            width: 24px;
+            height: 24px;
+            transform: translate(0, -42px);
+        }
+        @media (min-width: 768px){
+            background-size: 40px 40px;
+            width: 40px;
+            height: 40px; 
+            transform: translate(0, -70px);
+        }
+    }
+}
+
+.carousel__text-box_vk {
+    &::before {
+        background-image: url(../img/carousel/vk.svg);
+    }
+}
+
+.carousel__text-box_instagram {
+    &::before {
+        background-image: url(../img/carousel/instagram.svg);
+    }
+}
+
+.title-h3_carousel {
+    font-size: 20px;
+    line-height: 1; 
+    @media (min-width: 415px){
+        font-size: 16px;
+        max-width: 115px; 
+    }
+    @media (min-width: 480px){
+        font-size: 18px;
+        max-width: 125px;
+    }
+    @media (min-width: 768px){
+        font-size: 26px;
+        max-width: 180px;
+    }
+}
+
+.carousel__subtitle {
+    font-size: 14px;
+    line-height: 1; 
+    @media (min-width: 415px){
+        font-size: 11px;
+    }
+    @media (min-width: 480px){
+        font-size: 12px;
+    }
+    @media (min-width: 768px){
+        font-size: 18px;
+        font-size: 18px; 
+    }
+}
+
+.carousel__link {
+    word-break: break-word;
+    font-size: 14px;
+    line-height: 18px; 
+        @media (min-width: 415px){
+            font-size: 10px;
+            line-height: 13px; 
+        }
+        @media (min-width: 480px){
+            font-size: 12px;
+            line-height: 16px;
+        }
+        @media (min-width: 768px){
+            font-size: 16px;
+            line-height: 21px;
+        }
+}
+
+.carousel__text {
+    color: #243976;
+    font-size: 12px;
+    line-height: 16px;
+    @media (min-width: 415px){
+        font-size: 9px;
+        line-height: 14px; 
+    }
+    @media (min-width: 480px){
+        font-size: 12px;
+        line-height: 18px; 
+    }
+    @media (min-width: 768px){
+        font-size: 16px;
+        line-height: 21px; 
+        max-height: 195px;
+    }
+}
+
+.carousel__background {
+    @media (min-width: 415px){
+        position: absolute;
+        background-image: url(../img/carousel/vector.svg);
+        background-size: 302px 256px;
+        background-repeat: no-repeat;
+        width: 302px;
+        height: 256px;
+        z-index: -1;
+        top: 160px;
+    }
+    @media (min-width: 480px){
+        width: 344px;
+        height: 292px;
+        background-size: 344px 292px;
+        top: 130px;
+    }
+    @media (min-width: 768px){
+        width: 528px;
+        height: 450px;
+        background-size: 528px 450px;
+        top: 130px;
+    }
+    @media (min-width: 1000px){
+        width: 572px;
+        height: 487px;
+        background-size: 572px 487px;
+        top: 100px;
+        right: 50px;
+    }
+    @media (min-width: 1960px){
+        top: 120px;
+        transform: translate(-120%, 0);
+    }
+}
+//Кнопки слайдера
+.carousel__button-container {
+    width: 130px;
+    height: 50px;
+    display: flex;
+    justify-content: space-between;
+    @media (min-width: 768px){
+        width: 168px;
+        height: 69px;
+    }
+}
+
+.carousel__button {
+    cursor: pointer;
+    width: 50px;
+    height: 50px;
+    background-size: 50px;
+    transition: all 300ms ease-in-out;
+    background-image: url(../img/carousel/arrow.svg);
+    background-size: 50px 50px;
+    @media (min-width: 768px){
+        width: 69px;
+        height: 69px;
+        background-size: 69px 69px;
+    }
+}
+
+.carousel__button_right {
+    transform: rotate(-180deg);
+}

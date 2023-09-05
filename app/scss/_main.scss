@@ -1,0 +1,204 @@
+.main {
+    background: linear-gradient(180deg, #FFF 0%, #EEF1FD 100%);
+}
+
+.main__container {
+    display: flex;
+    flex-direction:column;
+    align-items: center;
+    position: relative;
+    max-width: 1180px;
+    margin: 0 auto;
+    margin-top: 30px;
+    padding-left: 20px;
+    padding-right: 20px;
+    @media (min-width: 769px){
+        padding-left: 40px;
+        padding-right: 40px; 
+    }
+    @media (min-width: 1000px){
+        align-items:flex-start;
+    }
+}
+
+.main__box-text {
+    margin-top: 40px;
+    z-index: 1;
+    order: 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-bottom: 30px;
+    @media (min-width: 769px){
+        margin-bottom: 20px;
+    }
+    @media (min-width: 1000px){
+        order: 1;
+        margin-bottom: 50px;
+    }
+    @media (min-width: 1920x){
+        order: 1;
+        margin-bottom: 65px;
+    }
+}
+
+.main__title {
+    font-family: 'ALS Schlange sans';
+    text-align: center;
+    font-size: 34px;
+    @media (min-width: 451px){
+        font-size: 40px;
+        width: auto;
+    }
+    @media (min-width: 769px){
+        font-size: 60px;
+        width: auto;
+    }
+    @media (min-width: 1000px){
+        font-size: 78px;
+        width: 682px;
+        height: 153px;
+        text-align: start;
+    }
+    @media (min-width: 1920px){
+        font-size: 84px;
+    }
+}
+
+.main__title_color {
+    color: #49B3F7;
+}
+
+.main__text {
+    text-align: center;
+    font-size: 15px;
+    line-height: 25px;
+    margin-top: 20px;
+    @media (min-width: 769px){
+        font-size: 17px;
+        line-height: 28px;
+        margin-top: 40px;
+        width: auto;
+    }
+    @media (min-width: 1000px){
+        text-align: start;
+        max-width: 445px;
+    }
+}
+
+.main__subtitle {
+    margin-top: 10px;
+    text-align: center;
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 25px;
+    @media (min-width: 768px){
+        text-align: center;
+    }
+    @media (min-width: 1000px){
+        text-align: start;
+    }
+}
+
+.box-record_who-suits {
+    @media (min-width: 768px){
+        margin-top: 20px;
+    }
+}
+
+.box-record {
+    margin: 0 auto;
+    margin-top: 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    @media (min-width: 769px){
+        margin-right: auto;
+    }
+    @media (min-width: 1000px){
+        margin-top: 40px;
+        margin-left: 0;
+    }
+}
+
+.button__record_max {
+    display: block;
+    width: 230px;
+    height: 55px;
+    @media (min-width: 415px){
+        width: 273px;
+        height: 67px;
+    }
+    @media (min-width: 768px){
+        width: 250px;
+        height: 61px;
+    }
+    @media (min-width: 1960px){
+        width: 273px;
+        height: 67px;
+    }
+}
+
+.main__box-social {
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 17px;
+}
+
+.main__box-social span {
+    color: #737373;
+    font-size: 14px;
+    line-height: 23px;
+}
+
+.button__twitter {
+    background: url(../img/main/telegram.svg) no-repeat center center;
+    width: 40px;
+    height: 40px;
+    background-color: #2F89CE;
+    border-radius: 20px;
+    &:hover {
+        background-color: #0969b3;
+        transform: scale(1.05, 1.05);
+        transition: all 0.3s ease-in-out;
+    }
+}
+
+.button__whatsapp {
+    background: url(../img/main/watsapp.svg) no-repeat center center;
+    width: 40px;
+    height: 40px;
+    background-color: #48C95F;
+    border-radius: 20px;
+    &:hover {
+        background-color: #2e9741;
+        transform: scale(1.05, 1.05);
+        transition: all 0.3s ease-in-out;
+    }
+}
+
+.main__background {
+    order: 1;
+    text-align: center;
+    @media (min-width: 769px){
+        width: 100%;
+        bottom: 20px;
+    }
+    @media (min-width: 1000px){
+        position: absolute;
+        bottom: 50px;
+        right: 0;
+        order: unset;
+        max-width: 581px;
+    }
+    @media (min-width: 1920px){
+        max-width: 673px;
+        bottom: 65px;
+    }
+}
+
+.main__background img{
+    max-width: 100%;
+}

@@ -1,0 +1,90 @@
+.certificate {
+    background-color: #fff;
+    padding-top: 50px;
+    padding-bottom: 50px;
+    @media (min-width: 480px){
+        padding-top: 70px;
+        padding-bottom: 70px;
+    }
+    @media (min-width: 768px){
+        padding-top: 40px;
+        padding-bottom: 80px;
+    }
+    @media (min-width: 1000px){
+        padding-top: 80px;
+    }
+}
+
+.certificate__container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 auto;
+    overflow: hidden;
+    max-width: 1180px;
+    padding-left: 20px;
+    padding-right: 20px;
+    @media (min-width: 1000px){
+        flex-direction: row;
+        justify-content: space-between;
+    }
+    & img {
+            width: 100%;
+           max-width: 352px;
+        @media (min-width: 768px){
+            max-width: 336px;
+        }
+        @media (min-width: 1000px){
+            max-width: 380px;
+        }
+        @media (min-width: 1920px){
+            max-width: 457px;
+        }
+    }
+}
+
+.certificate__box-text {
+    @media (min-width: 1000px){
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+        max-width: 488px;
+    }
+    @media (min-width: 1000px){
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+        max-width: 488px;
+    }
+}
+
+.title-h2_certificate {
+    padding-bottom: 40px;
+    @media (min-width: 1000px){
+        padding-bottom: 36px;
+        text-align:left;
+    }
+    @media (min-width: 1920px){
+        padding-bottom: 10px;
+    }
+}
+
+.certificate__text {
+    color: #243976;
+    text-align: center;
+    font-size: 16px;
+    line-height: 1;
+    padding-bottom: 30px;
+    @media (min-width: 480px){
+        font-size: 20px;
+    }
+    @media (min-width: 1000px){
+        font-size: 18px;
+        padding-bottom: 0;
+        text-align:left;
+    }
+    @media (min-width: 1920px){
+        font-size: 20px;
+    }
+
+}

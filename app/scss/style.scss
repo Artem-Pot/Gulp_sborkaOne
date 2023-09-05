@@ -1,3 +1,21 @@
+@import 'nulling';
+@import 'fonts';
+
 body {
-    background-color: rgb(0, 255, 34);
+    font-family: Gotham Pro, sans-serif;
+    font-weight: 400;
+    color: #243976;
+    background-color: #fff
 }
+
+@import 'header';
+@import 'main';
+@import 'who-suits';
+@import 'who-price';
+@import 'lessons';
+@import 'favorite';
+@import 'comparison';
+@import 'online-school';
+@import 'price';
+@import 'certificate';
+@import 'carousel';

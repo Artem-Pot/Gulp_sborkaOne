@@ -1,0 +1,140 @@
+.who-price {
+    background: #fff;
+    padding-bottom: 80px;
+}
+
+.who-price__container {
+    margin: 0 auto;
+    overflow: hidden;
+    max-width: 1180px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.who-price__price {
+    border-radius: 25px;
+    background: #EFF2FD;
+    padding: 30px 30px 0px;
+    @media (min-width: 768px){
+        display: flex;
+        flex-direction: column;
+        padding: 20px 20px 0px;
+        position: relative;
+        height: 255px;
+        align-items: center;
+    }
+    @media (min-width: 1000px){
+        padding: 0;
+        margin-top: 86px;
+        flex-direction:row !important;
+        padding-left: 262px;
+        gap: 22px;
+        height: 158px;
+    }
+}
+
+.who-price__wrapper-price {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    @media (min-width: 415px){
+        display: grid;
+        grid-template-areas:    "img title-h3"
+                                "img description";
+        gap: 15px;
+    }
+    @media (min-width: 768px){
+        align-items: flex-start;
+        display: flex;
+        flex-direction: column;
+        padding-left: 224px;
+    }
+    @media (min-width: 1000px){
+        padding-left: 0;
+    }
+    @media (min-width: 1960px){
+        padding-left: 20px;
+        max-width: 524px;
+    }
+}
+
+.title-h3 {
+    font-family: 'ALS Schlange sans';
+    font-size: 20px;
+    line-height: 21px;
+    text-align: center;
+    @media (min-width: 415px){
+        line-height: 24px;
+        font-size: 24px;
+        grid-area: title-h3;
+        text-align: left;
+        padding-top: 0;
+    }
+}
+
+.title-h3_who-price {
+    @media (min-width: 415px){
+        grid-area: title-h3;
+        text-align: left;
+        padding-top: 20px;
+    }
+    @media (min-width: 768px){
+        padding-top: 0;
+    }
+}
+
+.who-description {
+    font-size: 14px;
+    line-height: 18px; 
+    margin-top: 20px;
+    text-align: center;
+    @media (min-width: 415px){
+        text-align: left;
+        font-size: 16px;
+        grid-area: description;
+        padding-bottom: 20px;
+    }
+    @media (min-width: 768px){
+        font-size: 14px;
+        margin-top: 0;
+    }
+    @media (min-width: 1000px){
+        padding-bottom: 0;
+    }
+}
+
+.who-price__wrapper-price img {
+    margin-top: 15px;
+    @media (min-width: 415px){
+        width: 87px;
+        grid-area: img;
+    }
+    @media (min-width: 768px){
+        width: 168px;
+        position:absolute;
+        bottom: 18px;
+        left:  23px;
+    }
+    @media (min-width: 1000px){
+        width: 132px;
+        bottom: 15px;
+    }
+}
+
+.box-record_who-price {
+    margin-top: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    @media (min-width: 768px){
+        margin-top: 0;
+    }
+    @media (min-width: 1000px){
+        padding-right: 20px;
+    }
+    @media (min-width: 1960px){
+        margin-left: auto;
+        padding-right: 0;
+    }
+}
