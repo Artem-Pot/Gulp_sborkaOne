@@ -18,6 +18,7 @@ const gulppug = require('gulp-pug'); // препроцессор pug
 const plumber = require('gulp-plumber'); //поиск ошибок
 const notify = require('gulp-notify'); // вывод ошибок в виде уведомления 
 
+const log = require('fancy-log'); // вывод сообщений в консоль после каждого таска
 
 // функция работы с pug
 function pug() {
@@ -30,8 +31,9 @@ function pug() {
         .pipe(gulppug({    //функция преобразования
             verbose: true // опция - показывает какой файл преобразует
         }))
-        .pipe(dest('app/')) //кидает в папку с конечным файлом
+        .pipe(dest('app/')) //кидает в папку скомпилированный файл html 
         .pipe(browserSync.stream()) // отслеживание изменений
+        .on('end', function(){ log('------Компиляция Html завершена-----------')});
 }
 
 //функция работы со стилями
@@ -44,10 +46,11 @@ function styles() {
     }))) 
     // .pipe(autoprefixer({    //не работает
     // }))
-     .pipe(autoprefixer({ overrideBrowserslist : ['last 10 version']}))
+    //  .pipe(autoprefixer({ overrideBrowserslist : ['last 10 version']}))
     .pipe(scss()) //подключение к модулю scss + если нужно сжать файл .pipe(scss({ outputStyle: 'compressed'}))
     .pipe(dest('app/css')) //показать путь куда преобразовать готовый файл css
     .pipe(browserSync.stream()) // обновляет страницу после каждого изменения -  Лайв сервер
+    .on('end', function(){ log('------Компиляция CSS завершена-----------')});
 }
 //функция конвертации из любого формата шрифта в woff и woff2
 function fonts() {
@@ -58,25 +61,30 @@ function fonts() {
         .pipe(src('app/fonts/*.ttf')) // берет файлы которые сконвертировались выше и берет только форматы ttf
         .pipe(ttf2woff2())
         .pipe(dest('app/fonts'))
+        .on('end', function(){ log('------Конвертация шрифтов завершена-----------')});
 }
+
 //функция работы с изображениями, сжатие
 function images() { 
     return src('app/img/src/**/*.{jpg,jpeg,png,svg,gif,ico,webp,bmp}', 
-        {sourcemaps: true}) //взять исходные файлы олько файлы с изображениями из папки и сжать их + если нужно сжать файл .pipe(scss({ outputStyle: 'compressed'}))
+        {sourcemaps: true}) //взять исходные файлы только файлы с изображениями из папки и сжать их + если нужно сжать файл .pipe(scss({ outputStyle: 'compressed'}))
+
         .pipe(plumber(notify.onError({ //работа с поиском и выводом ошибок в сообщении
             title: "Images", 
             message: "Error: <%= error.message %>"
         }))) 
-        .pipe(newer('app/img')) //если видит что там уже есть изображения, не будет создавать другие
-        .pipe(imagemin()) //сжимает файлы
-        .pipe(dest('app/img/')); // перенос изображений в папку с жатыми файлами
-}
 
+        .pipe(newer('app/img/')) //если видит что там уже есть изображения, не будет создавать другие
+        .pipe(imagemin()) //сжимает файлы
+        .pipe(dest('app/img/')) // перенос изображений в папку с жатыми файлами
+        .on('end', function(){ log('------Сжатие и перенос изображений завершено-----------')});
+}
 
 // функция удаления папки dist перед сборкой
 function cleanDist() { 
     return src('dist')
     .pipe(clean())
+    .on('end', function(){ log('------Очистка папки Dist------------')});
 }
 
 // функция сборки всех скомпилированных файлов в нужную папку с готовым проектом
@@ -87,9 +95,11 @@ function building() {
     '!app/img/src/**/*.*', //запрещает перенос файлов из папки с исходными файлами, без сжатия
     'app/*.html', // работа с pug/html
     'app/css/*.*' // работа с css
-    ], {base : 'app'}) // создает туже самую структура папок как в app
-        .pipe(dest('dist')) // выгрузка в папку с готовым проектом /dist
+    ], {base : 'app'}) // создает туже самую структура папок как в папке сборки
+    .pipe(dest('dist')) // выгрузка в папку с готовым проектом /dist
+    .on('end', function(){ log('-------Компиляция сборки завершена------------')});
 }
+
 
 //функция отслеживания изменений файлов
 function watching() {
@@ -114,16 +124,16 @@ exports.pug = pug; // работа с pug
 exports.building = building; // функция сборки
 
 // // ------выполняет функции после старта сборки описанные выше, последовательно (series) или параллельно (parallel)(-------------
+
 // exports.build = series(cleanDist, building); //последовательная работа сначала преобразует файлы шрифтов, далее очистит папку с проектом и после перенесёт всё файлы в конечную папку
-// exports.default = parallel(styles, images, pug, fonts, browsersync, watching); // параллельная работа (отслеживание, изменение шрифтов, перенесение файлов )
+// exports.default = parallel(styles, images, pug, fonts, watching); // параллельная работа (отслеживание, изменение шрифтов, перенесение файлов )
 
-exports.build = series(cleanDist, building); //последовательная работа сначала преобразует файлы шрифтов, далее очистит папку с проектом и после перенесёт всё файлы в конечную папку
-exports.default = parallel(styles, images, pug, fonts, watching); // параллельная работа (отслеживание, изменение шрифтов, перенесение файлов )
+exports.default = series(styles, images, pug, fonts, cleanDist, building, watching);
 
-
-// exports.default = (series(cleanDist, building), parallel(styles, images, pug, fonts, browsersync, watching));
 
 //Полная сборка запускатся только так:  gulp build default т.к. exports.build = series почему не запускается совсем, только default
+//для изображений нужно сделать другой путь т.к. building повторяет папку img/dist в готовой сборке
+
 
 //не очищает папку dist перед сборкой
 //придумать как сделать чтобы сборку можно было делать если больше одной страницы, https://www.youtube.com/watch?v=Hh1aDoWMJXA -1:25
