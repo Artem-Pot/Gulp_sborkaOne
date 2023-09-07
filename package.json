@@ -21,7 +21,10 @@
     "gulp-plumber": "^1.2.1",
     "gulp-pug": "^5.0.0",
     "gulp-sass": "^5.1.0",
+    "gulp-sourcemaps": "^3.0.0",
     "gulp-ttf2woff2": "^4.0.1",
-    "sass": "^1.66.1"
+    "sass": "^1.66.1",
+    "w3c-html-validator": "^1.4.0"
   }
+
 }
