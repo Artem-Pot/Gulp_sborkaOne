@@ -1,7 +1,7 @@
 
 const {src, dest, watch, parallel, series} = require('gulp'); //присваиваем все возможности gulp встроенные в Gulp(поиск файла, место куда отправляется файл, отслеживание изменений, параллельная работа, последовательная работа))
 
-const fonter = require('gulp-fonter'); // из ttf в woff формат шрифта
+const fonter = require('gulp-fonter'); // конвертирует все форматы шрифтов
 const ttf2woff2 = require('gulp-ttf2woff2'); // из ttf в woff формат шрифта
 const clean = require('gulp-clean'); //удалит все файлы из папки dist перед компиляцией
 const browserSync = require('browser-sync').create(); // лайв сервер
@@ -22,7 +22,7 @@ const log = require('fancy-log'); // вывод сообщений в консо
 
 // функция работы с pug
 function pug() {
-    return src('app/pug/index.pug' , 
+    return src('app/pug/*.pug', 
     {sourcemaps: true}) // sourcemaps: true - покажет ошибку в каком конкретно файле произошла ошибка (если нужны ещё файлы то писать 'app/pug/index.pug', 'app/pug/index2.pug' и т.д
         .pipe(plumber(notify.onError({ //работа с поиском и выводом ошибок в сообщении
             title: "pug", 
@@ -38,7 +38,7 @@ function pug() {
 
 //функция работы со стилями
 function styles() {
-    return src('app/scss/style.scss', 
+    return src('app/scss/*.scss', 
     {sourcemaps: true}) //поиск файла стиля scss в сборке. sourcemaps: true - покажет ошибку в каком конкретно файле произошла ошибка
     .pipe(plumber(notify.onError({ //работа с поиском и выводом ошибок в сообщении
         title: "SCSS", 
@@ -58,7 +58,7 @@ function fonts() {
         .pipe(fonter({ //берет файлы и конвертирует их в woff и ttf
             formats: ['woff', 'ttf']
         }))
-        .pipe(src('app/fonts/*.ttf')) // берет файлы которые сконвертировались выше и берет только форматы ttf
+        .pipe(src('app/fonts/*.ttf')) // берет файлы которые сконвертировались выше и берет только форматы ttf и конвертирует их в woff2
         .pipe(ttf2woff2())
         .pipe(dest('app/fonts'))
         .on('end', function(){ log('------Конвертация шрифтов завершена-----------')});
@@ -94,12 +94,11 @@ function building() {
     'app/img/**/*.*', // работа с изображениями
     '!app/img/src/**/*.*', //запрещает перенос файлов из папки с исходными файлами, без сжатия
     'app/*.html', // работа с pug/html
-    'app/css/*.*' // работа с css
+    'app/css/*.css' // работа с css
     ], {base : 'app'}) // создает туже самую структура папок как в папке сборки
     .pipe(dest('dist')) // выгрузка в папку с готовым проектом /dist
     .on('end', function(){ log('-------Компиляция сборки завершена------------')});
 }
-
 
 //функция отслеживания изменений файлов
 function watching() {
@@ -110,7 +109,7 @@ function watching() {
     });
     watch(['app/fonts/src'], fonts)// если происходит изменение в папке fonts то запустит функцию конвертации 
     watch(['app/scss/*.scss'], styles) // если происходит изменение в файле style.scss то запускается функция (styles), для работы со стилями
-    watch(['app/img/**/*.*'], images); // если происходит изменение в папке, то запускает таск для изображений
+    watch(['app/img/src/**/*.*'], images); // если происходит изменение в папке, то запускает таск для изображений
     watch(['app/pug/*.pug'], pug);
 }
 
@@ -123,25 +122,13 @@ exports.images = images; // работа с изображениями
 exports.pug = pug; // работа с pug
 exports.building = building; // функция сборки
 
-// // ------выполняет функции после старта сборки описанные выше, последовательно (series) или параллельно (parallel)(-------------
-
-// exports.build = series(cleanDist, building); //последовательная работа сначала преобразует файлы шрифтов, далее очистит папку с проектом и после перенесёт всё файлы в конечную папку
-// exports.default = parallel(styles, images, pug, fonts, watching); // параллельная работа (отслеживание, изменение шрифтов, перенесение файлов )
-
+//------выполняет функции после старта сборки описанные выше, последовательно (series) или параллельно (parallel)(-------------
 exports.default = series(styles, images, pug, fonts, cleanDist, building, watching);
 
-
-//Полная сборка запускатся только так:  gulp build default т.к. exports.build = series почему не запускается совсем, только default
-//для изображений нужно сделать другой путь т.к. building повторяет папку img/dist в готовой сборке
-
-
-//не очищает папку dist перед сборкой
-//придумать как сделать чтобы сборку можно было делать если больше одной страницы, https://www.youtube.com/watch?v=Hh1aDoWMJXA -1:25
-// для css - это функци concat https://www.youtube.com/watch?v=Hh1aDoWMJXA - 41:30
+//Доработать сборку------------
 //добавить работу с js сборка
 //не работает автопрефиксер
 //подключить модуль, при удалении файла - удаляет из сборки (del)
 //модуль gulp-sourcemaps - чтобы видеть какие недочеты в dev tols с указанием на стили в формате scss а не css.
 //index.html сжимает, нужно отменить в настройках
-//сделать для изображений и шрифтов отдельную папку для конвертированных файлов ,чтобы не лежали вместе иначе путаница куда положить исходники
 //установить валидатор html https://github.com/center-key/w3c-html-validator
