@@ -1,4 +1,4 @@
-<h1 align="center">Привет, это мой новый проект - портфолио. <a href="https://artem-pot.github.io/Gulp_sborkaOne/dist/index.html">Онлайн школа</a></h1>
+<h1 align="center">Привет, это мой новый проект - портфолио. Файлы сборщика Gulp <a href="https://artem-pot.github.io/Gulp_sborkaOne/dist/index.html">Онлайн школа</a></h1>
 
 <ul>
     <li> Сайт по шаблону, взятого из Figma</li>
